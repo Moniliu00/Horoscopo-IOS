@@ -100,5 +100,26 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.AddressBreakpoint">
+         <BreakpointContent
+            uuid = "F7953C7D-38A3-4439-9EFC-6BAE79FC0745"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "*0x104a62668">
+            <Locations>
+               <Location
+                  uuid = "F7953C7D-38A3-4439-9EFC-6BAE79FC0745 - c4a7a94097e08ab2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "mach_o::NListSymbolTable::findClosestDefinedSymbol(unsigned long long, mach_o::Symbol&amp;) const"
+                  moduleName = "dyld_sim"
+                  usesParentBreakpointCondition = "Yes">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

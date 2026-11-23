@@ -1,0 +1,21 @@
+
+/* Class = "UINavigationItem"; title = "Zodiac"; ObjectID = "Ne9-Ih-dJ5"; */
+"Ne9-Ih-dJ5.title" = "Zodiac";
+
+/* Class = "UILabel"; text = "Horoscope dates"; ObjectID = "OSf-Kd-fnq"; */
+"OSf-Kd-fnq.text" = "Horoscope dates";
+
+/* Class = "UIBarButtonItem"; title = "Favorite"; ObjectID = "abQ-RX-leO"; */
+"abQ-RX-leO.title" = "Favorite";
+
+/* Class = "UILabel"; text = "Horoscope name"; ObjectID = "ewd-un-njs"; */
+"ewd-un-njs.text" = "Horoscope name";
+
+/* Class = "UINavigationItem"; title = "Detail"; ObjectID = "lzR-a2-aV8"; */
+"lzR-a2-aV8.title" = "Detail";
+
+/* Class = "UILabel"; text = "Horoscope Date"; ObjectID = "pPM-vh-rpX"; */
+"pPM-vh-rpX.text" = "Horoscope Date";
+
+/* Class = "UIBarButtonItem"; title = "Share"; ObjectID = "wkZ-aD-sel"; */
+"wkZ-aD-sel.title" = "Share";

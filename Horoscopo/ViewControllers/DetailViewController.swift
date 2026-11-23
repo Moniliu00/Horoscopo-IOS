@@ -7,6 +7,8 @@
 
 
 
+
+
 import UIKit
 
 // MARK: - API Models
@@ -30,27 +32,36 @@ class DetailViewController: UIViewController {
     var horoscope: Horoscope!
     var isFavorite = false
 
+    // MARK: - Outlets
+
     @IBOutlet weak var favoriteMenuItem: UIBarButtonItem!
     @IBOutlet weak var signImageView: UIImageView!
-
-    // New labels
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var periodSegmentedControl: UISegmentedControl!
     @IBOutlet weak var horoscopeLabel: UITextView!
+
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = horoscope.name
         navigationItem.subtitle = horoscope.dates
+
         signImageView.image = horoscope.sign
 
         // Display dates
         dateLabel.text = horoscope.dates
 
+        // Select Daily by default
+        periodSegmentedControl.selectedSegmentIndex = 0
+
         // Load daily horoscope
         horoscopeLabel.text = "Loading horoscope..."
         getHoroscope()
 
+        // Check favorite
         isFavorite = SessionManager().isFavorite(id: horoscope.id)
         setFavoriteIcon()
     }
@@ -60,10 +71,29 @@ class DetailViewController: UIViewController {
 
     func getHoroscope() {
 
-        let urlString = "https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign=\(horoscope.id)"
+        let periods = ["daily", "weekly", "monthly"]
+
+        let selectedIndex = periodSegmentedControl.selectedSegmentIndex
+
+        guard periods.indices.contains(selectedIndex) else {
+            print("Invalid segment selected")
+            return
+        }
+
+        let period = periods[selectedIndex]
+
+        let urlString = "https://freehoroscopeapi.com/api/v1/get-horoscope/\(period)?sign=\(horoscope.id)"
+
+        print("Selected period:", period)
+        print("Request URL:", urlString)
 
         guard let url = URL(string: urlString) else {
+            print("Invalid URL")
             return
+        }
+
+        DispatchQueue.main.async {
+            self.horoscopeLabel.text = "Loading horoscope..."
         }
 
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -77,10 +107,21 @@ class DetailViewController: UIViewController {
                 return
             }
 
-            guard let data = data,
-                  let response = response as? HTTPURLResponse,
-                  response.statusCode == 200 else {
+            guard let response = response as? HTTPURLResponse else {
+                print("Invalid response")
+                return
+            }
 
+            print("HTTP STATUS:", response.statusCode)
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            print("API RESPONSE:", String(data: data, encoding: .utf8) ?? "No data")
+
+            guard response.statusCode == 200 else {
                 DispatchQueue.main.async {
                     self.horoscopeLabel.text = "Unable to load horoscope."
                 }
@@ -88,15 +129,10 @@ class DetailViewController: UIViewController {
             }
 
             do {
-                print("API RESPONSE:")
-                print(String(data: data, encoding: .utf8) ?? "No data")
-
                 let result = try JSONDecoder().decode(
                     HoroscopeResponse.self,
                     from: data
                 )
-
-                print("HOROSCOPE:", result.data.horoscope)
 
                 DispatchQueue.main.async {
                     self.horoscopeLabel.text = result.data.horoscope
@@ -114,9 +150,20 @@ class DetailViewController: UIViewController {
     }
 
 
+    // MARK: - Period Selection
+
+    @IBAction func periodChanged(_ sender: UISegmentedControl) {
+
+        print("Selected segment:", sender.selectedSegmentIndex)
+
+        getHoroscope()
+    }
+
+
     // MARK: - Favorites
 
     func setFavoriteIcon() {
+
         if isFavorite {
             favoriteMenuItem.image = UIImage(systemName: "heart.fill")
         } else {
@@ -126,6 +173,7 @@ class DetailViewController: UIViewController {
 
 
     @IBAction func favoriteMenuClicked(_ sender: Any) {
+
         let session = SessionManager()
 
         if isFavorite {
@@ -160,4 +208,5 @@ class DetailViewController: UIViewController {
             completion: nil
         )
     }
+
 }
